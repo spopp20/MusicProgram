@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -8,45 +8,111 @@ generator client {
   previewFeatures = ["selectRelationCount", "nApi", "referentialActions"]
 }
 
-// models examples
+/
 model User {
   id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
+  createdAt DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
   email     String    @unique
   name      String?
   password  String
-  posts     Post[]
+  active    Int     @default(1)
   group     Group?    @relation(fields: [groupId], onDelete: SetNull, references: [id])
   groupId   Int?
-  comments  Comment[]
+  @@unique([email, active])
 }
 
-model Post {
-  id        Int       @id @default(autoincrement())
-  published Boolean   @default(false)
-  title     String
-  author    User?     @relation(fields: [authorId], onDelete: Cascade, references: [id])
-  authorId  Int?
-  comments  Comment[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
-model Comment {
-  id        Int      @id @default(autoincrement())
-  contain   String
-  post      Post     @relation(fields: [postId], onDelete: Cascade, references: [id])
-  postId    Int
-  author    User?    @relation(fields: [authorId], onDelete: SetNull, references: [id])
-  authorId  Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
 
 model Group {
   id        Int      @id @default(autoincrement())
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  description String
+  createdAt DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
   users     User[]
+}
+
+
+model Event {
+  id            Int       @id @default(autoincrement())
+  name          String    @default("") @db.VarChar(128)
+  active        Int       @default(1)
+  description   String?   @db.Text
+  venue         String?   @db.Text
+  location      String?   @db.Text
+  notes         String?   @db.Text
+  telephone     String?   @db.Text
+  startDateTime DateTime  @default(now()) @db.Timestamp(0)
+  endDateTime   DateTime? @default(now()) @db.Timestamp(0)
+  createAt      DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  updatedAt     DateTime  @default(now()) @db.Timestamp(0)
+
+  songList SongList[]
+}
+
+// Song List for an event
+model SongList {
+  id          Int @id @default(autoincrement())
+  events      Event? @relation(fields: [eventId], references: [id])
+  eventId     Int?
+  song        Song? @relation(fields: [songId], references: [id])
+  songId      Int?
+  published   Int      @default(0)
+  description String?  @db.Text
+  createdAt   DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  updatedAt   DateTime  @default(now()) @db.Timestamp(0)
+}
+
+model Song {
+  id          Int      @id @default(autoincrement())
+  title       String   @default("") @db.VarChar(128)
+  active      Int      @default(1)
+  alias       String?  @db.VarChar(128)
+  startKey    String?  @db.VarChar(15)
+  tempoCd     Int?
+  startWords  String?  @db.Text
+  arrangement String?  @db.Text
+  createdAt DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  songTag SongTag[]
+  songList SongList[]
+  sheetMusic SheetMusic[]
+}
+
+model SongTag {
+  id     Int  @id @default(autoincrement())
+  tag    Tag? @relation(fields: [tagId], references: [id])
+  tagId  Int?
+  song   Song? @relation(fields: [songId], references: [id])
+  songId Int?
+}
+
+model Tag {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  songTag SongTag[]
+}
+
+model Instrument {
+  id          Int      @id @default(autoincrement())
+  name        String   @default("") @db.VarChar(128)
+  active      Int      @default(1)
+  description String?  @db.Text
+  createdAt   DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  updatedAt   DateTime  @default(now()) @db.Timestamp(0)
+  sheetMusic   SheetMusic[]
+}
+
+model SheetMusic {
+  id Int       @id @default(autoincrement())
+  song         Song? @relation(fields: [songId], references: [id])
+  songId       Int?
+  instrument   Instrument? @relation(fields: [instrumentId], references: [id])
+  instrumentId Int?
+  notes        String?  @db.VarChar(128)
+  words        String?  @db.Text
+  mimeType     String?  @db.VarChar(128)
+  file         String?  @db.Text
+  createdAt   DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  updatedAt   DateTime  @default(now()) @db.Timestamp(0)
 }
