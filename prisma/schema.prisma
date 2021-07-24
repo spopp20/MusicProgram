@@ -8,7 +8,7 @@ generator client {
   previewFeatures = ["selectRelationCount", "nApi", "referentialActions"]
 }
 
-/
+
 model User {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
@@ -16,20 +16,17 @@ model User {
   email     String    @unique
   name      String?
   password  String
-  active    Int     @default(1)
-  group     Group?    @relation(fields: [groupId], onDelete: SetNull, references: [id])
-  groupId   Int?
+  active    Int       @default(1)
+  role      Role      @default(USER)
   @@unique([email, active])
 }
 
 
-model Group {
-  id        Int      @id @default(autoincrement())
-  name      String
-  description String
-  createdAt DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
-  users     User[]
+enum Role {
+  USER
+  EDITOR
+  LEADER
+  ADMIN
 }
 
 
@@ -46,16 +43,15 @@ model Event {
   endDateTime   DateTime? @default(now()) @db.Timestamp(0)
   createAt      DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
   updatedAt     DateTime  @default(now()) @db.Timestamp(0)
-
-  songList SongList[]
+  songs         EventSongList[]
 }
 
 // Song List for an event
-model SongList {
+model EventSongList {
   id          Int @id @default(autoincrement())
   events      Event? @relation(fields: [eventId], references: [id])
   eventId     Int?
-  song        Song? @relation(fields: [songId], references: [id])
+  songs       Song? @relation(fields: [songId], references: [id])
   songId      Int?
   published   Int      @default(0)
   description String?  @db.Text
@@ -74,23 +70,23 @@ model Song {
   arrangement String?  @db.Text
   createdAt DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
   updatedAt DateTime  @default(now()) @db.Timestamp(0)
-  songTag SongTag[]
-  songList SongList[]
-  sheetMusic SheetMusic[]
+  tags SongTag[]
+  events EventSongList[]
+  instruments SheetMusic[]
 }
 
 model SongTag {
   id     Int  @id @default(autoincrement())
-  tag    Tag? @relation(fields: [tagId], references: [id])
-  tagId  Int?
   song   Song? @relation(fields: [songId], references: [id])
+  tag    Tag? @relation(fields: [tagId], references: [id])
   songId Int?
+  tagId  Int?
 }
 
 model Tag {
   id      Int       @id @default(autoincrement())
   name    String    @unique
-  songTag SongTag[]
+  songs SongTag[]
 }
 
 model Instrument {
@@ -100,19 +96,19 @@ model Instrument {
   description String?  @db.Text
   createdAt   DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
   updatedAt   DateTime  @default(now()) @db.Timestamp(0)
-  sheetMusic   SheetMusic[]
+  songs       SheetMusic[]
 }
 
 model SheetMusic {
   id Int       @id @default(autoincrement())
-  song         Song? @relation(fields: [songId], references: [id])
-  songId       Int?
-  instrument   Instrument? @relation(fields: [instrumentId], references: [id])
-  instrumentId Int?
   notes        String?  @db.VarChar(128)
   words        String?  @db.Text
   mimeType     String?  @db.VarChar(128)
   file         String?  @db.Text
+  song         Song? @relation(fields: [songId], references: [id])
+  instrument   Instrument? @relation(fields: [instrumentId], references: [id])
+  songId       Int?
+  instrumentId Int?
   createdAt   DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
   updatedAt   DateTime  @default(now()) @db.Timestamp(0)
 }
