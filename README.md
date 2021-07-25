@@ -8,7 +8,7 @@ A full-stack application for tracking music events and song and associated song 
 * nexus
 
 ## Current State
-I am new to using the pal.js framework and the "yarn generate" step is currently failing on the song to tag many to many relation.
+I am new to using the pal.js framework and the "yarn generate" step is currently failing.
 
 Error: Missing type SongTagUpdateManyMutationInput
 

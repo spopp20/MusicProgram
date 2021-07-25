@@ -17,43 +17,29 @@ export const Song = objectType({
     t.nullable.string('arrangement')
     t.field('createdAt', { type: 'DateTime' })
     t.field('updatedAt', { type: 'DateTime' })
-    t.list.field('tags', {
-      type: 'SongTag',
-      args: {
-        where: 'SongTagWhereInput',
-        orderBy: 'SongTagOrderByInput',
-        cursor: 'SongTagWhereUniqueInput',
-        take: 'Int',
-        skip: 'Int',
-        distinct: 'SongTagScalarFieldEnum',
-      },
-      resolve(root: any) {
-        return root.tags
-      },
-    })
     t.list.field('events', {
-      type: 'EventSongList',
+      type: 'EventSong',
       args: {
-        where: 'EventSongListWhereInput',
-        orderBy: 'EventSongListOrderByInput',
-        cursor: 'EventSongListWhereUniqueInput',
+        where: 'EventSongWhereInput',
+        orderBy: 'EventSongOrderByInput',
+        cursor: 'EventSongWhereUniqueInput',
         take: 'Int',
         skip: 'Int',
-        distinct: 'EventSongListScalarFieldEnum',
+        distinct: 'EventSongScalarFieldEnum',
       },
       resolve(root: any) {
         return root.events
       },
     })
     t.list.field('instruments', {
-      type: 'SheetMusic',
+      type: 'InstrumentSong',
       args: {
-        where: 'SheetMusicWhereInput',
-        orderBy: 'SheetMusicOrderByInput',
-        cursor: 'SheetMusicWhereUniqueInput',
+        where: 'InstrumentSongWhereInput',
+        orderBy: 'InstrumentSongOrderByInput',
+        cursor: 'InstrumentSongWhereUniqueInput',
         take: 'Int',
         skip: 'Int',
-        distinct: 'SheetMusicScalarFieldEnum',
+        distinct: 'InstrumentSongScalarFieldEnum',
       },
       resolve(root: any) {
         return root.instruments

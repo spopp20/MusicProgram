@@ -6,6 +6,9 @@ import { join } from 'path'
 export const schema = makeSchema({
   types,
   plugins: [paljs()],
+  nonNullDefaults: {
+    output: true,
+  },
   outputs: {
     schema: __dirname + '/generated/schema.graphql',
     typegen: __dirname + '/generated/nexus.ts',

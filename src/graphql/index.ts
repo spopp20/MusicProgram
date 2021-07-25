@@ -1,11 +1,7 @@
-export * from './EventSongList'
-export * from './SheetMusic'
+export * from './InstrumentSong'
+export * from './EventSong'
 export * from './Instrument'
-export * from './Tag'
-export * from './SongTag'
 export * from './Song'
-export * from './SongList'
 export * from './Event'
-export * from './Group'
 export * from './User'
 export const testType = {}
