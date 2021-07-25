@@ -2,15 +2,12 @@
 
 A full-stack application for tracking music events and song and associated song lists. It will track the sheet music for each of the songs in an event for each of the participating instruments.
 
-## Created Using
-* pal.js
-* prismas
-* nexus
+It uses pal.js and an Apollo GraphQL server and a Prisma2 generated client. Queries and mutations are generated using Nexus.
+
 
 ## Current State
-I am new to using the pal.js framework and the "yarn generate" step is currently failing.
+The GraphQL API Server compiles and runs and proides an Admin interface to view the GraphQL schema and run queries.
 
-Error: Missing type SongTagUpdateManyMutationInput
 
 
 ## Setup
