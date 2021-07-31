@@ -50,6 +50,13 @@ yarn db-dev
 this commands will save your schema changes into your database. This is called a migration. You will be prompted to enter a name for that migration step.
 
 
+## Seed your dev database with data from the seed.ts script
+
+```shell
+yarn seed-dev
+```
+
+
 ## Build and Run
 
 ```shell
@@ -62,3 +69,27 @@ yarn dev
 - start dev server
 
 `Good work`
+
+
+## Run a GraphQL Query in Playgound
+
+Open http://localhost:4000/ to view the GraphQL Playground
+
+Enter this query
+
+```
+query UserList {
+  
+  findFirstUser {
+    id
+    name
+    email
+    createdAt
+    updatedAt
+  }
+}
+```
+
+Click the center run button. If you have run yarn seed-dev you will have that that is displayed to the right of the run button.
+
+

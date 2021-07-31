@@ -17,7 +17,7 @@ export const Event = objectType({
     t.nullable.string('telephone')
     t.field('startDateTime', { type: 'DateTime' })
     t.nullable.field('endDateTime', { type: 'DateTime' })
-    t.field('createAt', { type: 'DateTime' })
+    t.field('createdAt', { type: 'DateTime' })
     t.field('updatedAt', { type: 'DateTime' })
     t.list.field('songs', {
       type: 'EventSong',

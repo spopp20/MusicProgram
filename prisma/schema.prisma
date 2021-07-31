@@ -11,13 +11,16 @@ generator client {
 
 model User {
   id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
   updatedAt DateTime  @default(now()) @db.Timestamp(0)
   email     String    @unique
   name      String?
-  password  String
+  hashedPassword  String?
   active    Int       @default(1)
   role      Role      @default(USER)
+
+  tokens   Token[]
+  sessions Session[]
   @@unique([email, active])
 }
 
@@ -27,6 +30,41 @@ enum Role {
   EDITOR
   LEADER
   ADMIN
+}
+
+model Session {
+  id                 Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  expiresAt          DateTime?
+  handle             String    @unique
+  hashedSessionToken String?
+  antiCSRFToken      String?
+  publicData         String?
+  privateData        String?
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+model Token {
+  id          Int      @id @default(autoincrement())
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  hashedToken String
+  type        TokenType
+  expiresAt   DateTime
+  sentTo      String
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  @@unique([hashedToken, type])
+}
+
+
+enum TokenType {
+  RESET_PASSWORD
 }
 
 
@@ -41,8 +79,8 @@ model Event {
   telephone     String?   @db.Text
   startDateTime DateTime  @default(now()) @db.Timestamp(0)
   endDateTime   DateTime? @default(now()) @db.Timestamp(0)
-  createAt      DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
-  updatedAt     DateTime  @default(now()) @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
   songs         EventSong[]
 }
 
@@ -54,8 +92,8 @@ model EventSong {
   songId      Int?
   published   Int      @default(0)
   description String?  @db.Text
-  createdAt   DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
-  updatedAt   DateTime  @default(now()) @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
 }
 
 model Song {
@@ -68,7 +106,7 @@ model Song {
   startWords  String?  @db.Text
   arrangement String?  @db.Text
   tags        String?
-  createdAt DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
   updatedAt DateTime  @default(now()) @db.Timestamp(0)
   events EventSong[]
   instruments InstrumentSong[]
@@ -79,8 +117,8 @@ model Instrument {
   name        String   @default("") @db.VarChar(128)
   active      Int      @default(1)
   description String?  @db.Text
-  createdAt   DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
-  updatedAt   DateTime  @default(now()) @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
   songs       InstrumentSong[]
 }
 
@@ -94,6 +132,6 @@ model InstrumentSong {
   song         Song? @relation(fields: [songId], references: [id])
   songId       Int?
   instrumentId Int?
-  createdAt   DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
-  updatedAt   DateTime  @default(now()) @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
 }
