@@ -6,14 +6,19 @@ It uses pal.js and an Apollo GraphQL server and a Prisma2 generated client. Quer
 
 
 ## Current State
-The GraphQL API Server compiles and runs and proides an Admin interface to view the GraphQL schema and run queries.
 
+Added a "yarn seed-dev" command to seed a dev database with sample data
+
+The GraphQL API Server compiles and runs and proides an Admin interface to view the GraphQL schema and run queries.
+The GraphQL Playground runs GraphQL Queries and displays data.
 
 
 ## Setup
 
-Create the mysql database and copy create your secret .env file with the actual connection string
-Your .env file should never be checked into the repository.
+Create an empty mysql database schema
+Copy the "env.example" file (which is publicly viewable) into a .env file that you create.
+Your ".env" file must never become publicly viewable since it will contain your actual database connection string.
+Your .env file should never be checked into a code repository like GitHub
 
 
 ## Code Setup
@@ -39,15 +44,16 @@ Create an empty mysql database and give a user permissions to connect and operat
 I am using `mysql` as db provider in `schema.prisma`.
 
 
-## Prisma2 Schema
+## Prisma2 Create DB Schema
 
-After any update to your `schema.prisma` you will want to update your database schema by running:
+After any update to your `schema.prisma` file you will need to update your database schema by running:
 
 ```shell
 yarn db-dev
 ```
 
-this commands will save your schema changes into your database. This is called a migration. You will be prompted to enter a name for that migration step.
+This commands will save your schema changes into your database in a process called a migration. You will be prompted to enter a name for that migration step. The migration name should reflect the idea behind your schema.prisma file change.
+
 
 
 ## Seed your dev database with data from the seed.ts script
