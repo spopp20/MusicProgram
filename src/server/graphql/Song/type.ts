@@ -16,8 +16,6 @@ export const Song = objectType({
     t.nullable.string('startWords')
     t.nullable.string('arrangement')
     t.nullable.string('tags')
-    t.field('createdAt', { type: 'DateTime' })
-    t.field('updatedAt', { type: 'DateTime' })
     t.list.field('events', {
       type: 'EventSong',
       args: {
@@ -46,6 +44,8 @@ export const Song = objectType({
         return root.instruments
       },
     })
+    t.field('createdAt', { type: 'DateTime' })
+    t.field('updatedAt', { type: 'DateTime' })
     t.nullable.field('_count', {
       type: 'SongCountOutputType',
       resolve(root: any) {

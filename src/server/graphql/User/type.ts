@@ -8,8 +8,6 @@ export const User = objectType({
   name: 'User',
   definition(t) {
     t.int('id')
-    t.field('createdAt', { type: 'DateTime' })
-    t.field('updatedAt', { type: 'DateTime' })
     t.string('email')
     t.nullable.string('name')
     t.nullable.string('hashedPassword')
@@ -43,6 +41,8 @@ export const User = objectType({
         return root.sessions
       },
     })
+    t.field('createdAt', { type: 'DateTime' })
+    t.field('updatedAt', { type: 'DateTime' })
     t.nullable.field('_count', {
       type: 'UserCountOutputType',
       resolve(root: any) {

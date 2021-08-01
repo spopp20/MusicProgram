@@ -8,8 +8,6 @@ export const Session = objectType({
   name: 'Session',
   definition(t) {
     t.int('id')
-    t.field('createdAt', { type: 'DateTime' })
-    t.field('updatedAt', { type: 'DateTime' })
     t.nullable.field('expiresAt', { type: 'DateTime' })
     t.string('handle')
     t.nullable.string('hashedSessionToken')
@@ -23,5 +21,7 @@ export const Session = objectType({
       },
     })
     t.nullable.int('userId')
+    t.field('createdAt', { type: 'DateTime' })
+    t.field('updatedAt', { type: 'DateTime' })
   },
 })

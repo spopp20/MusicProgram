@@ -22,8 +22,8 @@ export const EventSong = objectType({
     })
     t.nullable.int('eventId')
     t.nullable.int('songId')
+    t.int('seqNumber')
     t.int('published')
-    t.nullable.string('description')
     t.field('createdAt', { type: 'DateTime' })
     t.field('updatedAt', { type: 'DateTime' })
   },

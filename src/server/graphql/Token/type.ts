@@ -8,8 +8,6 @@ export const Token = objectType({
   name: 'Token',
   definition(t) {
     t.int('id')
-    t.field('createdAt', { type: 'DateTime' })
-    t.field('updatedAt', { type: 'DateTime' })
     t.string('hashedToken')
     t.field('type', { type: 'TokenType' })
     t.field('expiresAt', { type: 'DateTime' })
@@ -21,5 +19,7 @@ export const Token = objectType({
       },
     })
     t.int('userId')
+    t.field('createdAt', { type: 'DateTime' })
+    t.field('updatedAt', { type: 'DateTime' })
   },
 })

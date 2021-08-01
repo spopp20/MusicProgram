@@ -56,13 +56,6 @@ This commands will save your schema changes into your database in a process call
 
 
 
-## Seed your dev database with data from the seed.ts script
-
-```shell
-yarn seed-dev
-```
-
-
 ## Build and Run
 
 ```shell
@@ -76,6 +69,14 @@ yarn dev
 
 `Good work`
 
+## Seed your dev database
+
+Add mockup data using the data data in seed.tse
+
+```shell
+yarn seed-dev
+```
+
 
 ## Run a GraphQL Query in Playgound
 
@@ -83,10 +84,10 @@ Open http://localhost:4000/ to view the GraphQL Playground
 
 Enter this query
 
-```
+```shell
 query UserList {
-  
-  findFirstUser {
+
+  findManyUser {
     id
     name
     email
@@ -98,4 +99,12 @@ query UserList {
 
 Click the center run button. If you have run yarn seed-dev you will have that that is displayed to the right of the run button.
 
+## Open Prisma Studio
 
+For a closer look at your data run Prisma
+
+```shell
+yarn studio
+```
+
+Before you can re-seed your database; delete your old data in Prisma Studio or in any database client.

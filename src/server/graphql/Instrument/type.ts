@@ -11,8 +11,6 @@ export const Instrument = objectType({
     t.string('name')
     t.int('active')
     t.nullable.string('description')
-    t.field('createdAt', { type: 'DateTime' })
-    t.field('updatedAt', { type: 'DateTime' })
     t.list.field('songs', {
       type: 'InstrumentSong',
       args: {
@@ -27,6 +25,8 @@ export const Instrument = objectType({
         return root.songs
       },
     })
+    t.field('createdAt', { type: 'DateTime' })
+    t.field('updatedAt', { type: 'DateTime' })
     t.nullable.field('_count', {
       type: 'InstrumentCountOutputType',
       resolve(root: any) {

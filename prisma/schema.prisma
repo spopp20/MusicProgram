@@ -8,22 +8,19 @@ generator client {
   previewFeatures = ["selectRelationCount", "nApi", "referentialActions"]
 }
 
-
 model User {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
-  email     String    @unique
-  name      String?
-  hashedPassword  String?
-  active    Int       @default(1)
-  role      Role      @default(USER)
-
-  tokens   Token[]
-  sessions Session[]
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  name           String?
+  hashedPassword String?
+  active         Int       @default(1)
+  role           Role      @default(USER)
+  tokens         Token[]
+  sessions       Session[]
+  createdAt      DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime  @updatedAt @db.Timestamp(0)
   @@unique([email, active])
 }
-
 
 enum Role {
   USER
@@ -34,39 +31,34 @@ enum Role {
 
 model Session {
   id                 Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
   expiresAt          DateTime?
   handle             String    @unique
   hashedSessionToken String?
   antiCSRFToken      String?
   publicData         String?
   privateData        String?
-
-  user   User? @relation(fields: [userId], references: [id])
-  userId Int?
+  user               User? @relation(fields: [userId], references: [id])
+  userId             Int?
+  createdAt          DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt          DateTime  @updatedAt @db.Timestamp(0)
 }
 
 model Token {
-  id          Int      @id @default(autoincrement())
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  id          Int     @id @default(autoincrement())
   hashedToken String
   type        TokenType
   expiresAt   DateTime
   sentTo      String
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-
+  user        User @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime  @updatedAt @db.Timestamp(0)
   @@unique([hashedToken, type])
 }
-
 
 enum TokenType {
   RESET_PASSWORD
 }
-
 
 model Event {
   id            Int       @id @default(autoincrement())
@@ -78,22 +70,22 @@ model Event {
   notes         String?   @db.Text
   telephone     String?   @db.Text
   startDateTime DateTime  @default(now()) @db.Timestamp(0)
-  endDateTime   DateTime? @default(now()) @db.Timestamp(0)
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  endDateTime   DateTime? @db.Timestamp(0)
   songs         EventSong[]
+  createdAt     DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt     DateTime  @updatedAt @db.Timestamp(0)
 }
 
 model EventSong {
   id          Int @id @default(autoincrement())
-  event      Event? @relation(fields: [eventId], references: [id])
-  song       Song? @relation(fields: [songId], references: [id])
+  event       Event? @relation(fields: [eventId], references: [id])
+  song        Song? @relation(fields: [songId], references: [id])
   eventId     Int?
   songId      Int?
+  seqNumber   Int
   published   Int      @default(0)
-  description String?  @db.Text
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  createdAt   DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime  @updatedAt @db.Timestamp(0)
 }
 
 model Song {
@@ -106,10 +98,10 @@ model Song {
   startWords  String?  @db.Text
   arrangement String?  @db.Text
   tags        String?
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
-  events EventSong[]
+  events      EventSong[]
   instruments InstrumentSong[]
+  createdAt   DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime  @updatedAt @db.Timestamp(0)
 }
 
 model Instrument {
@@ -117,9 +109,9 @@ model Instrument {
   name        String   @default("") @db.VarChar(128)
   active      Int      @default(1)
   description String?  @db.Text
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
   songs       InstrumentSong[]
+  createdAt   DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime  @updatedAt @db.Timestamp(0)
 }
 
 model InstrumentSong {
@@ -132,6 +124,6 @@ model InstrumentSong {
   song         Song? @relation(fields: [songId], references: [id])
   songId       Int?
   instrumentId Int?
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  createdAt    DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime  @updatedAt @db.Timestamp(0)
 }
